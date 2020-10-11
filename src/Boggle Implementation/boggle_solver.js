@@ -18,14 +18,14 @@
 
 
 
-//boggle grid                
-const grid = [['A', 'Qu'],
-['C', 'D']];
+// //boggle grid                
+// const grid = [['A', 'Qu'],
+// ['C', 'D']];
 
-//valid words
-const dictionary = ['art', 'ego', 'gent', 'get', 'net', 'new', 'newt', 'prat',
-    'pry', 'qua', 'quart', 'quartz', 'rat', 'tar', 'tarp',
-    'ten', 'went', 'wet', 'arty', 'egg', 'not', 'quar', 'ab', 'abd', 'dca', 'qac'];
+// //valid words
+// const dictionary = ['art', 'ego', 'gent', 'get', 'net', 'new', 'newt', 'prat',
+//     'pry', 'qua', 'quart', 'quartz', 'rat', 'tar', 'tarp',
+//     'ten', 'went', 'wet', 'arty', 'egg', 'not', 'quar', 'ab', 'abd', 'dca', 'qac'];
 
 //positions of tiles adjacent to the selected tile
 const adjacentTiles =   [[-1, -1], [0, -1], [1, -1],
@@ -232,6 +232,6 @@ exports.findAllSolutions = function (grid, dictionary) {
 
 
 
-exports.findAllSolutions(grid, dictionary );
+exports.findAllSolutions([], []);
 
 
