@@ -41,11 +41,11 @@ async function getUserInput({ promptText }) {
 
   let solutions = findAllSolutions.findAllSolutions([["O", "I", "H"], ["V", "O", "D"], ["U", "S", "O"]],
 
-/* lines 44 - 48 are the dictionary*/["div", "doo", "dso", "hods", "hood", "ids", "ods",
-      "oos", "ovoids", "sou", "vids", "divs", "doos", "hid",
-      "hoi", "hoods", "ios", "odso", "ous", "sod", "sov",
-      "void", "doh", "dos", "hod", "hoo", "hos", "odious",
-      "ooh", "ovoid", "soh", "vid", "voids"])
+  /* lines 44 - 48 are the dictionary*/             ["div", "doo", "dso", "hods", "hood", "ids", "ods",
+                                                    "oos", "ovoids", "sou", "vids", "divs", "doos", "hid",
+                                                    "hoi", "hoods", "ios", "odso", "ous", "sod", "sov",
+                                                    "void", "doh", "dos", "hod", "hoo", "hos", "odious",
+                                                    "ooh", "ovoid", "soh", "vid", "voids"])
 
   solutions.forEach(word => {
     if (word === promptResoponse) {
@@ -72,21 +72,15 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    // const response = await new StartButton();
-    // console.log(response);
-    // this.setState({ startState: response.state.state });
-    // console.log(findAllSolutions)
+    
     let solutions = findAllSolutions.findAllSolutions([["O", "I", "H"], ["V", "O", "D"], ["U", "S", "O"]],
 
-    /* lines 78 - 82 are the dictionary*/["div", "doo", "dso", "hods", "hood", "ids", "ods",
-        "oos", "ovoids", "sou", "vids", "divs", "doos", "hid",
-        "hoi", "hoods", "ios", "odso", "ous", "sod", "sov",
-        "void", "doh", "dos", "hod", "hoo", "hos", "odious",
-        "ooh", "ovoid", "soh", "vid", "voids"])
+    /* lines 77 - 81 are the dictionary*/             ["div", "doo", "dso", "hods", "hood", "ids", "ods",
+                                                      "oos", "ovoids", "sou", "vids", "divs", "doos", "hid",
+                                                      "hoi", "hoods", "ios", "odso", "ous", "sod", "sov",
+                                                      "void", "doh", "dos", "hod", "hoo", "hos", "odious",
+                                                      "ooh", "ovoid", "soh", "vid", "voids"])
 
-    console.log(solutions)
-    // this.setState({ answers: solutions})
-    console.log(this.state.answers)
 
     await solutions.forEach(answer => {
       validAnswers.push(answer + " :")
@@ -169,12 +163,14 @@ class App extends React.Component {
               console.log(result);
               return result;
             }).then((value) => {
-              if (!this.state.correct.includes(value + " ")) {
+              if (!this.state.correct.includes(value + " ") && (value != "")) {
                 this.state.correct.push(value + " ")
                 this.setState({ correct: this.state.correct })
                 console.log("STATE:" + this.state.correct)
+              } else if(value == ""){
+                alert("This word is not in the dictionary. Please enter another word")
               } else {
-                alert("You have already found this word. Please enter another.")
+                alert("You have already found this word. Please enter another word")
               }
 
             })

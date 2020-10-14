@@ -142,12 +142,19 @@ function insertWord(root, word) {
 }
 
 //converts all values in the grid to lowercase
-function loweCaseConversion(grid) {
+function loweCaseGridConversion(grid) {
     for (let x = 0; x < grid.length; x++)
         for (let y = 0; y < grid[x].length; y++)
             grid[x][y] = grid[x][y].toLowerCase();
+
 }
 
+function loweCaseDictConversion(grid) {
+    for (let x = 0; x < grid.length; x++)
+        grid[x] = grid[x].toLowerCase();
+
+    
+}
 //creates a map containing each dictionary value
 function createWordMap(array) {
     let originalMappings = new Object();
@@ -175,8 +182,12 @@ exports.findAllSolutions = function (grid, dictionary) {
         }
     }
     
+    loweCaseGridConversion(grid); //converts letters in the grid to be lower case
+    loweCaseDictConversion(dictionary); //converts letters in the dictionary to be lower ca
+
+    //checks to see if Qx; where x is any non-u letter exists
     var result = false;
-    let regEx1 = /(q[a-t]{1})|(q[v-z]{1})/;
+    let regEx1 = /(q[a-t]{1})|(q[v-z]{1}|(Q[A-T]{1})|(Q[V-Z]{1}))/;
     grid.forEach(line => {
         line.forEach(character => {
 
@@ -194,7 +205,7 @@ exports.findAllSolutions = function (grid, dictionary) {
     
     var test = false;
     var result2 = false;
-    let regEx2 = /([a-p][a-z])|([r-z][a-z])/;
+    let regEx2 = /([a-p][a-z]{1})|([r-z][a-z]{1})|([A-P][A-Z]{1})|([R-Z][A-Z]{1})/;
     grid.forEach(line => {
         line.forEach(character => {
 
@@ -214,8 +225,8 @@ exports.findAllSolutions = function (grid, dictionary) {
             return [];
         }
 
-    loweCaseConversion(grid); //converts letters in the grid to be lower case
-    loweCaseConversion(dictionary); //converts letters in the dictionary to be lower ca
+    // loweCaseConversion(grid); //converts letters in the grid to be lower case
+    // loweCaseConversion(dictionary); //converts letters in the dictionary to be lower ca
     let originalMappings = createWordMap(dictionary);
 
     let trie = createTrie(dictionary);
@@ -232,6 +243,7 @@ exports.findAllSolutions = function (grid, dictionary) {
 
 
 
-exports.findAllSolutions([], []);
+// exports.findAllSolutions([], []);
 
+exports.findAllSolutions([], [])
 

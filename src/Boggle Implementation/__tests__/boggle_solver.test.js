@@ -1,747 +1,747 @@
-/*
+// /*
 
-    Christopher Flowers
-    @02856440
-
-
-    test with "npm test"
-
-    /////////TEST CASES//////////
+//     Christopher Flowers
+//     @02856440
 
 
-    FINDS VALID WORDS           --DONE  
-    RECURSE ON THE DIAGONAL     --DONE
-    NON-ADJACENT LETTERS        --Done
-    DUPLICATE LETTERS           --DONE still has holes (ex: if a grid has a letter appear multiple times but those letters aren"t reached properly in the solution, the test will still pass)
-    SHORT WORDS                 --DONE
-    EMPTY INPUTS                --DONE
-    WORD CONTAINING QU          --DONE
-    END WITH A "Q"              --DONE
-    CONTAINS "QX" (X != "U")    --DONE
-    GRID DIMENSIONS             --DONE
-    PASSING INVALID INPUTS      --DONE
-*/
+//     test with "npm test"
+
+//     /////////TEST CASES//////////
+
+
+//     FINDS VALID WORDS           --DONE  
+//     RECURSE ON THE DIAGONAL     --DONE
+//     NON-ADJACENT LETTERS        --Done
+//     DUPLICATE LETTERS           --DONE still has holes (ex: if a grid has a letter appear multiple times but those letters aren"t reached properly in the solution, the test will still pass)
+//     SHORT WORDS                 --DONE
+//     EMPTY INPUTS                --DONE
+//     WORD CONTAINING QU          --DONE
+//     END WITH A "Q"              --DONE
+//     CONTAINS "QX" (X != "U")    --DONE
+//     GRID DIMENSIONS             --DONE
+//     PASSING INVALID INPUTS      --DONE
+// */
 
  
-// const findAllSolutions = require("../boggle_solver");
+const findAllSolutions = require("../boggle_solver");
 
-// //////////checks to see if all words in the solutions array are valid words//////////
-// function validWords(solutions, dictionary, state) {
+//////////checks to see if all words in the solutions array are valid words//////////
+function validWords(solutions, dictionary, state) {
 
     
-//     solutions.forEach(word => {
-//         if (dictionary.includes(word) == false) {
-//             return state = false;
-//         }
-//     });
-//     return state;
+    solutions.forEach(word => {
+        if (dictionary.includes(word) == false) {
+            return state = false;
+        }
+    });
+    return state;
 
-// }
+}
 
-// describe("Valid words function", () => {
-//     test("it should pass if all words in the solutions array exist in the dictionary", () => {
+describe("Valid words function", () => {
+    test("it should pass if all words in the solutions array exist in the dictionary", () => {
 
-//         const grid =    [["C", "A", "T"],
-//                         ["B", "A", "N"],
-//                         ["G", "A", "P"]];
+        const grid =    [["C", "A", "T"],
+                        ["B", "A", "N"],
+                        ["G", "A", "P"]];
 
-//         const dictionary = ["cap", "cab", "gap", "pan", "tan", "ban", "cat", "can", "pant"];
-
-
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
-
-//         const output = true;
-
-//         expect(validWords(solutions, dictionary, true)).toEqual(output);
-
-//     });
-
-//     test("it should pass and return an empty array if no words in the dictionary are found", () => {
-
-//         const grid =    [["A", "A", "A"],
-//                         ["A", "A", "A"],
-//                         ["A", "A", "A"]];
-
-//         const dictionary = ["cap", "cab", "gap", "pan", "tan", "ban", "cat", "can", "pant"];
+        const dictionary = ["cap", "cab", "gap", "pan", "tan", "ban", "cat", "can", "pant"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = [];
+        const output = true;
 
-//         expect(validWords(solutions, dictionary, [])).toEqual(output);
+        expect(validWords(solutions, dictionary, true)).toEqual(output);
 
-//     });
+    });
+
+    test("it should pass and return an empty array if no words in the dictionary are found", () => {
+
+        const grid =    [["A", "A", "A"],
+                        ["A", "A", "A"],
+                        ["A", "A", "A"]];
+
+        const dictionary = ["cap", "cab", "gap", "pan", "tan", "ban", "cat", "can", "pant"];
 
 
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
+        const output = [];
 
-//     // test("it should fail if any words in the solutions array don"t exist in the dictionary", () => {
-//     //     const grid =    [["C", "A", "T"],
-//     //                     ["B", "A", "N"],
-//     //                     ["G", "A", "P"]];
+        expect(validWords(solutions, dictionary, [])).toEqual(output);
 
-//     //     const dictionary = ["cap", "cab", "gap", "pan", "tan", "ban", "cat", "can", "pant"];
-
-//     //     const testDictionary = ["cab", "gap", "ban", "cat", "can", "pant"];
-
-//     //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
-
-//     //     const output = true;
-
-//     //     expect(validWords(solutions, testDictionary, true)).toEqual(output); //removed cap, pan, and tan from the test dictionary so the test should fail
-
-//     // });
+    });
 
 
 
-// });
 
-// //////////checks to see if the function recurses on the diagonal//////////
-// function diagonalRecursion(solutions, dictionary, state) {
+    // test("it should fail if any words in the solutions array don"t exist in the dictionary", () => {
+    //     const grid =    [["C", "A", "T"],
+    //                     ["B", "A", "N"],
+    //                     ["G", "A", "P"]];
 
-//     solutions.forEach(word => {
-//         if (dictionary.includes(word) == false) {
-//             return state = false;
-//         }
+    //     const dictionary = ["cap", "cab", "gap", "pan", "tan", "ban", "cat", "can", "pant"];
 
-//     });
-//     return state;
-// }
+    //     const testDictionary = ["cab", "gap", "ban", "cat", "can", "pant"];
 
-// describe("Diagonal recursion function", () => {
-//     test("it should pass if the words formed on the diagonal are added to the solutions array", () => {
+    //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
 
-//         const grid =    [["C", "A", "T"],
-//                         ["B", "A", "N"],
-//                         ["G", "A", "P"]];
+    //     const output = true;
 
-//         const dictionary = ["gat", "tag", "cap", "pac"];
+    //     expect(validWords(solutions, testDictionary, true)).toEqual(output); //removed cap, pan, and tan from the test dictionary so the test should fail
+
+    // });
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = true;
+});
 
-//         expect(diagonalRecursion(solutions, dictionary, true)).toEqual(output);
+//////////checks to see if the function recurses on the diagonal//////////
+function diagonalRecursion(solutions, dictionary, state) {
 
-//     });
+    solutions.forEach(word => {
+        if (dictionary.includes(word) == false) {
+            return state = false;
+        }
 
-//         test("it should pass if the words formed on the diagonal are added to the solutions array", () => {
+    });
+    return state;
+}
+
+describe("Diagonal recursion function", () => {
+    test("it should pass if the words formed on the diagonal are added to the solutions array", () => {
+
+        const grid =    [["C", "A", "T"],
+                        ["B", "A", "N"],
+                        ["G", "A", "P"]];
+
+        const dictionary = ["gat", "tag", "cap", "pac"];
+
+
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+
+        const output = true;
+
+        expect(diagonalRecursion(solutions, dictionary, true)).toEqual(output);
+
+    });
+
+        test("it should pass if the words formed on the diagonal are added to the solutions array", () => {
     
-//             const grid =    [["C", "A", "T", "A", "U"],
-//                             ["C", "I", "T", "T", "V"],
-//                             ["C", "A", "N", "A", "V"],
-//                             ["C", "A", "T", "A", "V"],
-//                             ["C", "A", "T", "A", "P"],];
+            const grid =    [["C", "A", "T", "A", "U"],
+                            ["C", "I", "T", "T", "V"],
+                            ["C", "A", "N", "A", "V"],
+                            ["C", "A", "T", "A", "V"],
+                            ["C", "A", "T", "A", "P"],];
     
-//             const dictionary = ["panic", "cantu"];
+            const dictionary = ["panic", "cantu"];
     
     
-//             let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+            let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
     
-//             const output = true;
+            const output = true;
     
-//             expect(diagonalRecursion(solutions, dictionary, true)).toEqual(output);
+            expect(diagonalRecursion(solutions, dictionary, true)).toEqual(output);
     
-//         });
-// });
+        });
+});
 
-// //////////checks to see if any of the words in the solutions array use non-adjacent characters//////////
-// function nonAdjacent(solutions, dictionary, state) {
+//////////checks to see if any of the words in the solutions array use non-adjacent characters//////////
+function nonAdjacent(solutions, dictionary, state) {
 
-//     solutions.forEach(word => {
-//         if (dictionary.includes(word) == true) {
-//             return state = true;
-//         }
-//     });
+    solutions.forEach(word => {
+        if (dictionary.includes(word) == true) {
+            return state = true;
+        }
+    });
 
-//     return state;
-// }
+    return state;
+}
 
-// describe("Non-adjacent function", () => {
-//     test("it should pass if the words added to the solutions array do not use non-adjacent letters", () => {
+describe("Non-adjacent function", () => {
+    test("it should pass if the words added to the solutions array do not use non-adjacent letters", () => {
 
-//         const grid =    [["C", "A", "E"],
-//                         ["B", "O", "F"],
-//                         ["G", "T", "N"]];
+        const grid =    [["C", "A", "E"],
+                        ["B", "O", "F"],
+                        ["G", "T", "N"]];
 
-//         const dictionary = ["cat", "gone", "fat", "feat", "gen", "bat"];
+        const dictionary = ["cat", "gone", "fat", "feat", "gen", "bat"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = false;
+        const output = false;
 
-//         expect(nonAdjacent(solutions, dictionary, false)).toEqual(output);
+        expect(nonAdjacent(solutions, dictionary, false)).toEqual(output);
 
-//     });
+    });
 
         
-// });
+});
 
-// //////////checks to see if letters have visited repeated//////////
-// function duplicateLetters(solutions, dictionary, state) {
+//////////checks to see if letters have visited repeated//////////
+function duplicateLetters(solutions, dictionary, state) {
 
-//                                             // var gridDict = new Map(); //dictionary top track the frequency of each letter in the grid
+                                            // var gridDict = new Map(); //dictionary top track the frequency of each letter in the grid
 
-//                                             // grid.forEach(line => { //create the dictionary data type for the grid
-//                                             //     line.forEach(letter => {
-//                                             //         gridDict.set(letter, 0)
+                                            // grid.forEach(line => { //create the dictionary data type for the grid
+                                            //     line.forEach(letter => {
+                                            //         gridDict.set(letter, 0)
 
-//                                             //     })
-//                                             // })
+                                            //     })
+                                            // })
 
-//                                             // grid.forEach(line => { //set frequency of each letter in the grid/dictionary data type
-//                                             //     line.forEach(letter => {
-//                                             //         // console.log(gridDict.get(letter));
-//                                             //         gridDict.set(letter, gridDict.get(letter) + 1)
-//                                             //     })
-//                                             // })
+                                            // grid.forEach(line => { //set frequency of each letter in the grid/dictionary data type
+                                            //     line.forEach(letter => {
+                                            //         // console.log(gridDict.get(letter));
+                                            //         gridDict.set(letter, gridDict.get(letter) + 1)
+                                            //     })
+                                            // })
 
 
-//                                             // var solutionDict = new Map(); //dictionary top track the frequency of each letter in each word in the solutions array
+                                            // var solutionDict = new Map(); //dictionary top track the frequency of each letter in each word in the solutions array
 
-//                                             // solutions.forEach(word => {
+                                            // solutions.forEach(word => {
 
-//                                             //     for (let i in word) { //create the dictionary data type for a word in the solutions array
-//                                             //         solutionDict.set(word[i], 0)
-//                                             //     }
+                                            //     for (let i in word) { //create the dictionary data type for a word in the solutions array
+                                            //         solutionDict.set(word[i], 0)
+                                            //     }
                                             
 
 
-//                                             //     for (let i in word) { //set frequency of each letter in the word/dictionary data type
-//                                             //         solutionDict.set(word[i], solutionDict.get(word[i]) + 1)
-//                                             //     }
+                                            //     for (let i in word) { //set frequency of each letter in the word/dictionary data type
+                                            //         solutionDict.set(word[i], solutionDict.get(word[i]) + 1)
+                                            //     }
                                                 
 
-//                                             //     for (let x in word) { //check the two dictionaries against each other
+                                            //     for (let x in word) { //check the two dictionaries against each other
 
-//                                             //         if (solutionDict.get(word[x]) > gridDict.get(word[x])) { //if a letter appear more times in a solution than it appears in teh grid, fail the test
-//                                             //             console.log("error")
-//                                             //             return true;
-//                                             //         }
-//                                             //     }
+                                            //         if (solutionDict.get(word[x]) > gridDict.get(word[x])) { //if a letter appear more times in a solution than it appears in teh grid, fail the test
+                                            //             console.log("error")
+                                            //             return true;
+                                            //         }
+                                            //     }
                                             
 
-//                                             //     solutionDict = new Map(); //reset the solution dictionary to check the next word
+                                            //     solutionDict = new Map(); //reset the solution dictionary to check the next word
 
-//                                             // })
+                                            // })
 
-//                                             // return false;
+                                            // return false;
 
-//     solutions.forEach(word => {
-//         if (dictionary.includes(word) == true) {
-//             return state = true;
-//         }
-//     });
+    solutions.forEach(word => {
+        if (dictionary.includes(word) == true) {
+            return state = true;
+        }
+    });
                                         
-//     return state;
+    return state;
 
-// }
+}
 
-// describe("Duplicate letters function", () => {
-//     test("it should pass if none of letters in the grid are visited more than once", () => {
+describe("Duplicate letters function", () => {
+    test("it should pass if none of letters in the grid are visited more than once", () => {
 
-//         const grid =    [["C", "A", "F"],
-//                         ["B", "O", "E"],
-//                         ["D", "T", "N"]];
+        const grid =    [["C", "A", "F"],
+                        ["B", "O", "E"],
+                        ["D", "T", "N"]];
 
-//         const dictionary = ["none", "boot", "food", "fee", "feet", "teen", "cotten"];
+        const dictionary = ["none", "boot", "food", "fee", "feet", "teen", "cotten"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = false;
+        const output = false;
 
-//         expect(duplicateLetters(solutions, dictionary, false)).toEqual(output);
+        expect(duplicateLetters(solutions, dictionary, false)).toEqual(output);
 
-//     });
+    });
 
 
 
-//     // test("it should fail if any of the letters in the grid are visited more than once", () => {
+    // test("it should fail if any of the letters in the grid are visited more than once", () => {
 
-//     //     const grid = [["T", "W", "Y", "R"],
-//     //     ["E", "N", "P", "H"],
-//     //     ["G", "Z", "Qu", "R"],
-//     //     ["O", "N", "T", "A"]];
+    //     const grid = [["T", "W", "Y", "R"],
+    //     ["E", "N", "P", "H"],
+    //     ["G", "Z", "Qu", "R"],
+    //     ["O", "N", "T", "A"]];
 
-//     //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//     //         "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//     //         "ten", "went", "wet", "arty", "egg", "not", "quar"];
+    //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+    //         "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+    //         "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//     //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
+    //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
 
-//     //     const output = true;
+    //     const output = true;
 
-//     //     expect(duplicateLetters(grid, solutions.push("gene"))).toEqual(output); //adding gene, which would be an invalid solution to show a failed case
+    //     expect(duplicateLetters(grid, solutions.push("gene"))).toEqual(output); //adding gene, which would be an invalid solution to show a failed case
 
-//     // });
+    // });
 
 
 
-// });
+});
 
 
-// //////////checks to see if any words in the solutions array are less than 3 characters//////////
-// function shortWords(solutions) {
+//////////checks to see if any words in the solutions array are less than 3 characters//////////
+function shortWords(solutions) {
 
-//     if(solutions.length == 0) {
-//         return solutions;
-//     }
-//     else if (solutions == null) {
-//         return true;
-//     }
+    if(solutions.length == 0) {
+        return solutions;
+    }
+    else if (solutions == null) {
+        return true;
+    }
 
-//     solutions.forEach(word => {
+    solutions.forEach(word => {
 
-//         if (word.length < 3) {
-//             return true;
-//         }
+        if (word.length < 3) {
+            return true;
+        }
 
-//     });
-//     return false;
+    });
+    return false;
 
 
-// }
+}
 
-// describe("Short words function", () => {
-//     test("it should pass if all words in the solutions array are greater than or equal to three characters", () => {
+describe("Short words function", () => {
+    test("it should pass if all words in the solutions array are greater than or equal to three characters", () => {
 
-//         const grid = [["T", "W", "Y", "R"],
-//                      ["E", "N", "P", "H"],
-//                      ["G", "Z", "Qu", "R"],
-//                      ["O", "N", "T", "A"]];
+        const grid = [["T", "W", "Y", "R"],
+                     ["E", "N", "P", "H"],
+                     ["G", "Z", "Qu", "R"],
+                     ["O", "N", "T", "A"]];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar", "at", "en"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar", "at", "en"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = false;
+        const output = false;
 
-//         expect(shortWords(solutions)).toEqual(output);
+        expect(shortWords(solutions)).toEqual(output);
 
-//     });
+    });
 
-//     test("it should pass even if the solutions array is empty", () => {
+    test("it should pass even if the solutions array is empty", () => {
 
-//         const grid = [];
+        const grid = [];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = [];
+        const output = [];
 
-//         expect(shortWords(solutions)).toEqual(output); //pushing a word less than 3 characters to show a failed case
+        expect(shortWords(solutions)).toEqual(output); //pushing a word less than 3 characters to show a failed case
 
-//     });
-// });
+    });
+});
 
 
-// //////////checks to see if the grid or disctionary are empty//////////
-// function emptyInputs(grid, dictionary) {
+//////////checks to see if the grid or disctionary are empty//////////
+function emptyInputs(grid, dictionary) {
 
-//     if (grid == null || dictionary == null || grid.length == 0 || dictionary.length == 0) {
-//         return [];
-//     }
+    if (grid == null || dictionary == null || grid.length == 0 || dictionary.length == 0) {
+        return [];
+    }
 
-//     return true;
+    return true;
 
 
-// }
+}
 
-// describe("Empty inputs function", () => {
-//     test("it should pass if none of the grid or dictionary inputs are empty", () => {
-//         const grid = [["T", "W", "Y", "R"],
-//                      ["E", "N", "P", "H"],
-//                      ["G", "Z", "Qu", "R"],
-//                      ["O", "N", "T", "A"]];
+describe("Empty inputs function", () => {
+    test("it should pass if none of the grid or dictionary inputs are empty", () => {
+        const grid = [["T", "W", "Y", "R"],
+                     ["E", "N", "P", "H"],
+                     ["G", "Z", "Qu", "R"],
+                     ["O", "N", "T", "A"]];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
 
-//         const output = true;
+        const output = true;
 
-//         expect(emptyInputs(grid, dictionary)).toEqual(output);
+        expect(emptyInputs(grid, dictionary)).toEqual(output);
 
-//     });
+    });
 
-//     test("it should pass, returning an empty array,  if the grid is empty", () => {
-//         const grid = [];
+    test("it should pass, returning an empty array,  if the grid is empty", () => {
+        const grid = [];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//         const output = [];
+        const output = [];
 
-//         expect(emptyInputs(grid, dictionary)).toEqual(output);
+        expect(emptyInputs(grid, dictionary)).toEqual(output);
 
-//     });
+    });
 
-//     test("it should pass, returning an empty array, if the dictionary is empty", () => {
-//         const grid = [["T", "W", "Y", "R"],
-//                      ["E", "N", "P", "H"],
-//                      ["G", "Z", "Qu", "R"],
-//                      ["O", "N", "T", "A"]];
+    test("it should pass, returning an empty array, if the dictionary is empty", () => {
+        const grid = [["T", "W", "Y", "R"],
+                     ["E", "N", "P", "H"],
+                     ["G", "Z", "Qu", "R"],
+                     ["O", "N", "T", "A"]];
 
-//         const dictionary = [];
+        const dictionary = [];
 
 
-//         const output = [];
+        const output = [];
 
-//         expect(emptyInputs(grid, dictionary)).toEqual(output);
+        expect(emptyInputs(grid, dictionary)).toEqual(output);
 
-//     });
-// });
+    });
+});
 
 
-// //////////checks to see if any of the values in the solutions array contain the string "Qu"//////////
-// function containsQu(solutions, ending) {
+//////////checks to see if any of the values in the solutions array contain the string "Qu"//////////
+function containsQu(solutions, ending) {
 
-//     let regEx = /(qu{1})|(Qu{1})/;
+    let regEx = /(qu{1})|(Qu{1})/;
 
-//     solutions.forEach(word => {
-//         word = word.toLowerCase();
+    solutions.forEach(word => {
+        word = word.toLowerCase();
 
-//         let test = regEx.test(word);
-//         if (test == true) {
-//             return ending = true;
-//         }
-//     });
-//     return ending;
+        let test = regEx.test(word);
+        if (test == true) {
+            return ending = true;
+        }
+    });
+    return ending;
 
 
-// }
+}
 
-// describe("Contains qu function", () => {
-//     test("it should pass if any of the words in the solutions array conain the substring Qu", () => {
+describe("Contains qu function", () => {
+    test("it should pass if any of the words in the solutions array conain the substring Qu", () => {
 
-//         const grid = [["T", "W", "Y", "R"],
-//         ["E", "N", "P", "H"],
-//         ["G", "Z", "Qu", "R"],
-//         ["O", "N", "T", "A"]];
+        const grid = [["T", "W", "Y", "R"],
+        ["E", "N", "P", "H"],
+        ["G", "Z", "Qu", "R"],
+        ["O", "N", "T", "A"]];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = true;
+        const output = true;
 
-//         expect(containsQu(solutions, true)).toEqual(output);
+        expect(containsQu(solutions, true)).toEqual(output);
 
-//     });
+    });
 
 
 
-//     // test("it should fail if none of the words in the solutions array conain the substring Qu", () => {
+    // test("it should fail if none of the words in the solutions array conain the substring Qu", () => {
 
-//     //     const grid = [["T", "W", "Y", "R"],
-//     //     ["E", "N", "P", "H"],
-//     //     ["G", "Z", "Qu", "R"],
-//     //     ["O", "N", "T", "A"]];
+    //     const grid = [["T", "W", "Y", "R"],
+    //     ["E", "N", "P", "H"],
+    //     ["G", "Z", "Qu", "R"],
+    //     ["O", "N", "T", "A"]];
 
-//     //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//     //         "pry", "rat", "tar", "tarp",
-//     //         "ten", "went", "wet", "arty", "egg", "not"];
+    //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+    //         "pry", "rat", "tar", "tarp",
+    //         "ten", "went", "wet", "arty", "egg", "not"];
 
 
-//     //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
+    //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
 
-//     //     expect(containsQu(solutions, false)).toEqual(output);
+    //     expect(containsQu(solutions, false)).toEqual(output);
 
-//     // });
+    // });
 
 
 
-// });
+});
 
 
-// //checks to see if any of the values in the soutions array end with the character "q"
-// function endsWithQ(solutions, ending) {
+//checks to see if any of the values in the soutions array end with the character "q"
+function endsWithQ(solutions, ending) {
 
-//     solutions.forEach(word => {
-//         word = word.toLowerCase();
+    solutions.forEach(word => {
+        word = word.toLowerCase();
 
-//         if (word.substr(-1) == "q" || word.substr(-1) == "Q") {
-//             return ending = true;
-//         }
-//     });
-//     return ending;
+        if (word.substr(-1) == "q" || word.substr(-1) == "Q") {
+            return ending = true;
+        }
+    });
+    return ending;
 
 
-// }
+}
 
-// describe("Ends with q function", () => {
-//     test("it should pass if none of the words in the solutions array end with a q", () => {
+describe("Ends with q function", () => {
+    test("it should pass if none of the words in the solutions array end with a q", () => {
 
-//         const grid = [["T", "W", "Y", "R"],
-//                      ["E", "N", "P", "H"],
-//                      ["G", "Z", "Qu", "A"],
-//                      ["O", "N", "T", "R"]];
+        const grid = [["T", "W", "Y", "R"],
+                     ["E", "N", "P", "H"],
+                     ["G", "Z", "Qu", "A"],
+                     ["O", "N", "T", "R"]];
 
-//         const dictionary = ["qua", "quart", "quartz", "rat", "tar", "tarp", "parq", "ten", "hat"];
+        const dictionary = ["qua", "quart", "quartz", "rat", "tar", "tarp", "parq", "ten", "hat"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = false;
+        const output = false;
 
-//         expect(endsWithQ(solutions, false)).toEqual(output);
+        expect(endsWithQ(solutions, false)).toEqual(output);
 
-//     });
+    });
 
 
 
-//     // test("it should fail if any of the words in the solutions array end with a q", () => {
+    // test("it should fail if any of the words in the solutions array end with a q", () => {
 
-//     //     const grid = [["T", "W", "Y", "R"],
-//     //     ["E", "N", "P", "H"],
-//     //     ["G", "Z", "Qu", "R"],
-//     //     ["O", "N", "T", "A"]];
+    //     const grid = [["T", "W", "Y", "R"],
+    //     ["E", "N", "P", "H"],
+    //     ["G", "Z", "Qu", "R"],
+    //     ["O", "N", "T", "A"]];
 
-//     //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//     //         "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//     //         "ten", "went", "wet", "arty", "egg", "not", "quar"];
+    //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+    //         "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+    //         "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//     //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
+    //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
 
-//     //     const output = false;
+    //     const output = false;
 
-//     //     expect(endsWithQ(solutions.push("pranq"), false)).toEqual(output); //adding pranq which would cause this test to fail
+    //     expect(endsWithQ(solutions.push("pranq"), false)).toEqual(output); //adding pranq which would cause this test to fail
 
-//     // });
+    // });
 
 
 
-// });
+});
 
 
 
-// //checks to see if any of the values in the solutions array contain Qx, where x is any non "u" character
-// function containsQx(solutions, grid, ending) {
+//checks to see if any of the values in the solutions array contain Qx, where x is any non "u" character
+function containsQx(solutions, grid, ending) {
 
-//     let regEx = /(q[a-t]{1})|(q[v-z]{1})/;
-//     let result = false;
-//     grid.forEach(line => {
-//         line.forEach(character => {
+    let regEx = /(q[a-t]{1})|(q[v-z]{1})/;
+    let result = false;
+    grid.forEach(line => {
+        line.forEach(character => {
 
-//         character = character.toLowerCase();
-//         var test = regEx.test(character);
-//         if (test == true) {
-//             result = true;
-//         }
-//         });
+        character = character.toLowerCase();
+        var test = regEx.test(character);
+        if (test == true) {
+            result = true;
+        }
+        });
 
         
-//     });
+    });
 
-//     if(result == true) {
-//         return solutions;
-//     }
-//     return ending;
+    if(result == true) {
+        return solutions;
+    }
+    return ending;
 
 
-// }
+}
 
-// describe("Contains qx function", () => {
-//     test("it should pass, returning an empty array, if the grid contains the substring Qx, where x is any character besides u", () => {
+describe("Contains qx function", () => {
+    test("it should pass, returning an empty array, if the grid contains the substring Qx, where x is any character besides u", () => {
 
-//         const grid = [["T", "S", "Y", "R"],
-//                      ["Qa", "N", "P", "H"],
-//                      ["G", "Z", "Qu", "R"],
-//                      ["O", "N", "T", "A"]];
+        const grid = [["T", "S", "Y", "R"],
+                     ["Qa", "N", "P", "H"],
+                     ["G", "Z", "Qu", "R"],
+                     ["O", "N", "T", "A"]];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar", "sqat", "qan"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar", "sqat", "qan"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = [];
+        const output = [];
 
-//         expect(containsQx(solutions, grid, false)).toEqual(output);
+        expect(containsQx(solutions, grid, false)).toEqual(output);
 
-//     });
+    });
 
 
 
-//     // test("it should fail if none of the words in the solutions array conain the substring Qx, where x is any character besides "u"", () => {
+    // test("it should fail if none of the words in the solutions array conain the substring Qx, where x is any character besides "u"", () => {
 
-//     //     const grid = [["T", "W", "Y", "R"],
-//     //     ["N", "Qa", "P", "H"],
-//     //     ["G", "Qe", "Qu", "R"],
-//     //     ["O", "N", "T", "A"]];
+    //     const grid = [["T", "W", "Y", "R"],
+    //     ["N", "Qa", "P", "H"],
+    //     ["G", "Qe", "Qu", "R"],
+    //     ["O", "N", "T", "A"]];
 
-//     //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//     //         "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//     //         "ten", "went", "wet", "arty", "egg", "not", "quar"];
+    //     const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+    //         "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+    //         "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//     //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
+    //     let solutions = findAllSolutions.findAllSolutions(grid, dictionary)
 
-//     //     const output = false;
+    //     const output = false;
 
-//     //     expect(containsQx(solutions.push("qake"), false)).toEqual(output); //pushing quke to the solutions array which would cause this test to fail
+    //     expect(containsQx(solutions.push("qake"), false)).toEqual(output); //pushing quke to the solutions array which would cause this test to fail
 
-//     // });
+    // });
 
 
 
-// });
+});
 
 
-// //////////checks to make sure grid is a N x N matrix//////////
-// function checkDimensions(grid, size, solutions) {
+//////////checks to make sure grid is a N x N matrix//////////
+function checkDimensions(grid, size, solutions) {
 
-//     let boolean = false;
-//     grid.forEach(row => {
-//         if (row.length == size) { //checks if the number of elements in each row matches the expected size N
-//             boolean = true;
-//         }
-//         else { //sets boolean to false and returns if one of the rows does not equal the expected N
-//             return solutions;
-//         }
+    let boolean = false;
+    grid.forEach(row => {
+        if (row.length == size) { //checks if the number of elements in each row matches the expected size N
+            boolean = true;
+        }
+        else { //sets boolean to false and returns if one of the rows does not equal the expected N
+            return solutions;
+        }
 
-//     });
+    });
 
-//     if (boolean == true && grid.length == size) {
-//         return true;
-//     }
-//     else {
-//         return solutions;
-//     }
+    if (boolean == true && grid.length == size) {
+        return true;
+    }
+    else {
+        return solutions;
+    }
 
 
-// }
+}
 
-// describe("Dimension function", () => {
-//     test("it should pass when the grid is a N x N matrix", () => {
+describe("Dimension function", () => {
+    test("it should pass when the grid is a N x N matrix", () => {
 
-//         const grid = [["T", "W", "Y", "R"],
-//         ["E", "N", "P", "H"],
-//         ["G", "Z", "Qu", "R"],
-//         ["O", "N", "T", "A"]];
+        const grid = [["T", "W", "Y", "R"],
+        ["E", "N", "P", "H"],
+        ["G", "Z", "Qu", "R"],
+        ["O", "N", "T", "A"]];
 
 
 
 
 
-//         const output = true;
+        const output = true;
 
-//         expect(checkDimensions(grid, grid.length)).toEqual(output);
+        expect(checkDimensions(grid, grid.length)).toEqual(output);
 
-//     });
+    });
 
-//     test("it should pass, returning an empty array, when the grid is not a N x N matrix", () => {
+    test("it should pass, returning an empty array, when the grid is not a N x N matrix", () => {
 
-//         const grid = [["T", "W", "Y", "R"],
-//         ["E", "N", "P", "H"],
-//         ["G", "Z", "Qu", "R"]];
+        const grid = [["T", "W", "Y", "R"],
+        ["E", "N", "P", "H"],
+        ["G", "Z", "Qu", "R"]];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = [];
+        const output = [];
 
-//         expect(checkDimensions(grid, grid.length, solutions)).toEqual(output);
+        expect(checkDimensions(grid, grid.length, solutions)).toEqual(output);
 
-//     });
+    });
 
-// });
+});
 
 
-// /////////checks for invalid input//////////
-// function invalidInput(grid, ending, solutions) {
+/////////checks for invalid input//////////
+function invalidInput(grid, ending, solutions) {
 
-//     // let regEx = /([a-p]{1})|([r-z]{1})|(qu{1})|(Qu{1})/
-//     let result = false;
-//     let regEx = /([a-p][a-z])|([r-z][a-z])/;
-//     grid.forEach(line => {
-//         line.forEach(character => {
+    // let regEx = /([a-p]{1})|([r-z]{1})|(qu{1})|(Qu{1})/
+    let result = false;
+    let regEx = /([a-p][a-z])|([r-z][a-z])/;
+    grid.forEach(line => {
+        line.forEach(character => {
 
-//             character = character.toLowerCase();
-//             let test = regEx.test(character);
-//             if (test == true) {
-//                 result = true;
-//             }
+            character = character.toLowerCase();
+            let test = regEx.test(character);
+            if (test == true) {
+                result = true;
+            }
 
-//         });
-//     });
-//     if(result == true) {
-//         return solutions;
-//     }
-//     return ending;
+        });
+    });
+    if(result == true) {
+        return solutions;
+    }
+    return ending;
 
-// }
+}
 
-// describe("Invalid input function", () => {
-//     test("it should pass if the input grid contains valid characters", () => {
+describe("Invalid input function", () => {
+    test("it should pass if the input grid contains valid characters", () => {
 
-//         const grid = [["T", "W", "Y", "R"],
-//         ["E", "N", "P", "H"],
-//         ["G", "Z", "Qu", "R"],
-//         ["O", "N", "T", "A"]];
+        const grid = [["T", "W", "Y", "R"],
+        ["E", "N", "P", "H"],
+        ["G", "Z", "Qu", "R"],
+        ["O", "N", "T", "A"]];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = false;
+        const output = false;
 
-//         expect(invalidInput(grid, false, solutions)).toEqual(output);
+        expect(invalidInput(grid, false, solutions)).toEqual(output);
 
-//     });
+    });
 
-//     test("it should pass, returning an empty array, when the input grid contains invalid characters", () => {
+    test("it should pass, returning an empty array, when the input grid contains invalid characters", () => {
 
-//         const grid = [["T", "Wa", "Y", "R"],
-//         ["E", "N", "P", "H"],
-//         ["G", "Z", "Qu", "R"],
-//         ["O", "N", "T", "A"]];
+        const grid = [["T", "Wa", "Y", "R"],
+        ["E", "N", "P", "H"],
+        ["G", "Z", "Qu", "R"],
+        ["O", "N", "T", "A"]];
 
-//         const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
-//             "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
-//             "ten", "went", "wet", "arty", "egg", "not", "quar"];
+        const dictionary = ["art", "ego", "gent", "get", "net", "new", "newt", "prat",
+            "pry", "qua", "quart", "quartz", "rat", "tar", "tarp",
+            "ten", "went", "wet", "arty", "egg", "not", "quar"];
 
 
-//         let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
+        let solutions = findAllSolutions.findAllSolutions(grid, dictionary);
 
-//         const output = [];
+        const output = [];
 
-//         expect(invalidInput(grid, false, solutions)).toEqual(output); //added the string "Wa" to the grid which is an invalid input
+        expect(invalidInput(grid, false, solutions)).toEqual(output); //added the string "Wa" to the grid which is an invalid input
 
-//     });
+    });
 
-// });
+});
 
 
-
+///////////////////////////
 
 
 
@@ -770,11 +770,16 @@ let dict = ["AQU"];
 });
 });
 
+// function ToGrid(rows) {
+//     grid = Array.from(rows);
+//     // console.log(grid)
+//     return grid.map(row => row.split(""));
+// }
+
+// GIVEN CODE
 function ToGrid(rows) {
-    grid = Array.from(rows);
-    // console.log(grid)
-return grid.map(row => row.split(""));
-}
+    return rows.map(row => row.split(""));
+    }
 
 describe("Basic Sanity Checks", function() {
 test('Empty Board', () => {
@@ -783,7 +788,8 @@ let dict = ["ABC", "DEF"];
 expect(boggle_solver.findAllSolutions(grid, dict)).toEqual([]);
 });
 test('searches in all directions', () => {
-let grid = ToGrid("ABC", "DEF", "GHI");
+// let grid = ToGrid("ABC", "DEF", "GHI");
+let grid = [['A', 'B', 'C'], ['D', 'E', 'F'], ['G', 'H', 'I']]
 let dict = ["EAB", "EBC", "ECB", "EDB", "EFB", "EGH", "EHI", "EIH"];
 let solutions = boggle_solver.findAllSolutions(grid, dict);
 lowercaseStringArray(solutions);
@@ -794,12 +800,12 @@ expect(solutions.sort()).toEqual(dict.sort());
 
 describe("Duplicate Letters", function() {
 test('Immediate Loop', () => {
-let grid = ToGrid("A");
+let grid = [["A"]];
 let dict = ["AA"];
 expect(boggle_solver.findAllSolutions(grid, dict)).toEqual([]);
 });
 test('Later Loop', () => {
-let grid = ToGrid("AB", "CD");
+let grid = [["A", "B"], ["C", "D"]];
 let dict = ["ABCA"];
 expect(boggle_solver.findAllSolutions(grid, dict)).toEqual([]);
 });
@@ -822,6 +828,7 @@ expect(solutions.sort()).toEqual(dict.sort());
 describe('Pathologically Slow', function() {
 test('Try large matrix, duplicates, and long sequence', () => {
 let grid = ToGrid('ABCDEFGHIJKLMN', 'NMLKJIHGFEDCBA', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN', 'ABCDEFGHIJKLMN'); // Very slow if 10x10 instead of 2x2. 
+console.log(grid)
 let dict = ['ANMLKJ', 'ABCDKJIH', 'ABCDEFGHIJKLM', 'AAAAAAAAAA'];
 let expected = ['ANMLKJ', 'ABCDKJIH', 'ABCDEFGHIJKLM', 'AAAAAAAAAA'];
 
@@ -834,13 +841,13 @@ let expected = ['ANMLKJ', 'ABCDKJIH', 'ABCDEFGHIJKLM', 'AAAAAAAAAA'];
 
 describe("Recursive Steps", function() {
 test('Illegal Jumps', () => {
-let grid = ToGrid("ABC", "DEF", "GHI");
-let dict = ["ADC", "ABG"];
+    let grid = [['A', 'B', 'C'], ['D', 'E', 'F'], ['G', 'H', 'I']]
+    let dict = ["ADC", "ABG"];
 expect(boggle_solver.findAllSolutions(grid, dict)).toEqual([]);
 });
 test('Windy Path', () => {
-let grid = ToGrid("ABC", "DEF", "GHI");
-let dict = ["ABFHDEC"]; // Snake through the grid.
+    let grid = [['A', 'B', 'C'], ['D', 'E', 'F'], ['G', 'H', 'I']]
+    let dict = ["ABFHDEC"]; // Snake through the grid.
 let solutions = boggle_solver.findAllSolutions(grid, dict);
 
   // Lowercasing for case-insensitive string array matching.
