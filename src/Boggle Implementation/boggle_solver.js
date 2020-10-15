@@ -243,7 +243,6 @@ exports.findAllSolutions = function (grid, dictionary) {
 
 
 
-// exports.findAllSolutions([], []);
+exports.findAllSolutions([], []);
 
-exports.findAllSolutions([], [])
 
