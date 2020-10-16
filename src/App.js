@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import BoggleSolver from './Boggle Implementation/boggle_solver';
 // import StartButton from './StartButton';
 // import StopButton from './StopButton';
-import { Grid, Button, TextField, Input } from '@material-ui/core'
+import { Grid, Button, TextField, Input } from '@material-ui/core';
+import Timer from 'react-compound-timer'
+import * as firebase from 'firebase';
 import './App.css';
 import TextInput from './AnswerInput';
 
@@ -31,21 +33,23 @@ var validAnswers = [];
 const findAllSolutions = require("./Boggle Implementation/boggle_solver");
 
 
-async function getUserInput({ promptText }) {
+async function getUserInput(promptText, grid, dict) {
 
   var value = "";
-  // const [text, setText] = useState("no text set");
+  var trueGrid = [];
+  // var grid = Array.from(grid);
+  console.log(grid.size)
+
+  for (let i = 1; i <= grid.size; i++) {
+    trueGrid.push(grid.grid[i]);
+  }
+  console.log(trueGrid)
   const promptResoponse = prompt(promptText)
   console.log(promptResoponse);
-  // setText(promptResoponse);
 
-  let solutions = findAllSolutions.findAllSolutions([["O", "I", "H"], ["V", "O", "D"], ["U", "S", "O"]],
 
-  /* lines 44 - 48 are the dictionary*/             ["div", "doo", "dso", "hods", "hood", "ids", "ods",
-                                                    "oos", "ovoids", "sou", "vids", "divs", "doos", "hid",
-                                                    "hoi", "hoods", "ios", "odso", "ous", "sod", "sov",
-                                                    "void", "doh", "dos", "hod", "hoo", "hos", "odious",
-                                                    "ooh", "ovoid", "soh", "vid", "voids"])
+
+  let solutions = findAllSolutions.findAllSolutions(trueGrid, dict)
 
   solutions.forEach(word => {
     if (word === promptResoponse) {
@@ -53,12 +57,13 @@ async function getUserInput({ promptText }) {
       value = promptResoponse;
       console.log(value)
     }
-
   })
   return value;
-
 }
 
+async function setGrid() {
+
+}
 class App extends React.Component {
 
   constructor(props) {
@@ -68,18 +73,36 @@ class App extends React.Component {
       answers: validAnswers,
       word: '',
       correct: [],
+      grids: [],
     }
+    this.ref = firebase.firestore();
   }
 
   async componentDidMount() {
-    
-    let solutions = findAllSolutions.findAllSolutions([["O", "I", "H"], ["V", "O", "D"], ["U", "S", "O"]],
 
-    /* lines 77 - 81 are the dictionary*/             ["div", "doo", "dso", "hods", "hood", "ids", "ods",
-                                                      "oos", "ovoids", "sou", "vids", "divs", "doos", "hid",
-                                                      "hoi", "hoods", "ios", "odso", "ous", "sod", "sov",
-                                                      "void", "doh", "dos", "hod", "hoo", "hos", "odious",
-                                                      "ooh", "ovoid", "soh", "vid", "voids"])
+    this.unsubscribe = this.ref.collection('3x3').onSnapshot((querySnapshot) => {
+      var gridArray = [];
+      querySnapshot.forEach((doc) => {
+        gridArray.push({
+          grid: doc.data().grid,
+          dictionary: doc.data().dictionary,
+          size: doc.data().size,
+        })
+      })
+      console.log(gridArray[0].grid);
+      this.setState({
+        grids: gridArray,
+      })
+
+      this.unsubscribe();
+    })
+
+    var trueGrid_Mount = [];
+    for (let i = 1; i <= this.state.grids.size; i++) {
+      trueGrid_Mount.push(this.state.grids[0].grid[i]);
+    }
+
+    let solutions = findAllSolutions.findAllSolutions(trueGrid_Mount, this.state.grids.dictionary)
 
 
     await solutions.forEach(answer => {
@@ -97,6 +120,25 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
+        {this.state.state == true && <Timer
+            initialTime={0}
+            direction="forward"
+            timeToUpdate={10}
+            checkpoints={[
+              {
+                time: 0,
+                callback: () => alert('countdown finished'),
+              },
+            ]}
+          >
+            <div style={{ fontFamily: 'Helvetica Neue' }}>
+              <div style={{ fontSize: 32 }}>
+              <Timer.Minutes /> minutes   
+              <div></div>
+                <Timer.Seconds /> seconds
+              </div>
+            </div>
+          </Timer>}
           <header as='h1'>Boggle Game</header>
           {this.state.state === false && <p>Valid Answers</p>}
           {this.state.state === false && <p>{this.state.answers}</p>}
@@ -104,17 +146,26 @@ class App extends React.Component {
           {this.state.state === true && <p>{this.state.correct}</p>}
           {this.state.state === false && <p>Your Correct Answers</p>}
           {this.state.state === false && <p>{this.state.correct}</p>}
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
 
-          {/* <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
+          {this.state.state == true && <Timer
+            initialTime={0}
+            direction="forward"
+            timeToUpdate={10}
+            checkpoints={[
+              {
+                time: 0,
+                callback: () => alert('countdown finished'),
+              },
+            ]}
           >
-            Learn React
-          </a> */}
-
+            <div style={{ fontFamily: 'Helvetica Neue' }}>
+              <div style={{ fontSize: 32 }}>
+              <Timer.Minutes /> minutes   
+              <div></div>
+                <Timer.Seconds /> seconds
+              </div>
+            </div>
+          </Timer>}
 
           {this.state.state === true && <Grid container justify="center" spacing={100}>
             {/* Row 1 */}
@@ -158,7 +209,7 @@ class App extends React.Component {
           <TextInput promptText="Enter Word" />   */}
 
           {this.state.state === true && <Button variant="contained" color="white" prompt="Enter Word" onClick={() => {
-            getUserInput(prompt).then(function (result) {
+            getUserInput(prompt, this.state.grids[0], this.state.grids[0].dictionary).then(function (result) {
               console.log("Returned");
               console.log(result);
               return result;
@@ -167,7 +218,7 @@ class App extends React.Component {
                 this.state.correct.push(value + " ")
                 this.setState({ correct: this.state.correct })
                 console.log("STATE:" + this.state.correct)
-              } else if(value == ""){
+              } else if (value == "") {
                 alert("This word is not in the dictionary. Please enter another word")
               } else {
                 alert("You have already found this word. Please enter another word")
@@ -179,14 +230,13 @@ class App extends React.Component {
 
           <Button variant="contained" color="primary" onClick={() => {
             console.log("Pressed");
+            console.log(this.state.grids.grid)
             this.setState({ state: true });
-            console.log(this.state.state);
           }}> Start </Button>
 
           <Button variant="contained" color="secondary" onClick={() => {
             console.log("Pressed");
             this.setState({ state: false });
-            console.log(this.state.state);
           }}> Stop </Button>
 
         </header>

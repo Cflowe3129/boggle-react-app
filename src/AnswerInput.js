@@ -10,10 +10,10 @@ function TextInput({ promptText }) {
         console.log(promptResoponse);
         setText(promptResoponse);
         
-        let solutions = findAllSolutions.findAllSolutions([['A', 'Qu'],
-        ['C', 'D']], ['art', 'ego', 'gent', 'get', 'net', 'new', 'newt', 'prat',
-            'pry', 'qua', 'quart', 'quartz', 'rat', 'tar', 'tarp',
-            'ten', 'went', 'wet', 'arty', 'egg', 'not', 'quar', 'ab', 'abd', 'dca', 'qac'])
+        // let solutions = findAllSolutions.findAllSolutions([['A', 'Qu'],
+        // ['C', 'D']], ['art', 'ego', 'gent', 'get', 'net', 'new', 'newt', 'prat',
+        //     'pry', 'qua', 'quart', 'quartz', 'rat', 'tar', 'tarp',
+        //     'ten', 'went', 'wet', 'arty', 'egg', 'not', 'quar', 'ab', 'abd', 'dca', 'qac'])
         
 
     }
