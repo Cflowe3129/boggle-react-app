@@ -52,18 +52,18 @@ async function getUserInput(promptText, grid, dict) {
   let solutions = findAllSolutions.findAllSolutions(trueGrid, dict)
 
   solutions.forEach(word => {
-    if (word === promptResoponse) {
+    let response = promptResoponse.toLowerCase();
+    console.log(response)
+    if (word === response) {
       console.log("true")
-      value = promptResoponse;
+      value = response;
       console.log(value)
     }
   })
   return value;
 }
 
-async function setGrid() {
 
-}
 class App extends React.Component {
 
   constructor(props) {
@@ -74,13 +74,14 @@ class App extends React.Component {
       word: '',
       correct: [],
       grids: [],
+      timer: undefined,
     }
     this.ref = firebase.firestore();
   }
 
   async componentDidMount() {
 
-    this.unsubscribe = this.ref.collection('3x3').onSnapshot((querySnapshot) => {
+    this.unsubscribe = this.ref.collection('3x3').onSnapshot(async (querySnapshot) => {
       var gridArray = [];
       querySnapshot.forEach((doc) => {
         gridArray.push({
@@ -89,27 +90,36 @@ class App extends React.Component {
           size: doc.data().size,
         })
       })
-      console.log(gridArray[0].grid);
+      console.log(gridArray[0].dictionary);
       this.setState({
         grids: gridArray,
       })
+
+      var mapToGrid = [];
+      for (let i = 1; i <= gridArray[0].size; i++) {
+        mapToGrid.push(gridArray[0].grid[i]);
+      }
+      console.log(mapToGrid)
+
+      let solutions = await findAllSolutions.findAllSolutions(mapToGrid, gridArray[0].dictionary)
+
+      console.log(solutions)
+      await solutions.forEach(answer => {
+        validAnswers.push(answer + " :")
+      })
+
+      console.log(this.state.answers)
 
       this.unsubscribe();
     })
 
     var trueGrid_Mount = [];
     for (let i = 1; i <= this.state.grids.size; i++) {
-      trueGrid_Mount.push(this.state.grids[0].grid[i]);
+      trueGrid_Mount.push(this.state.grids.grid[i]);
     }
+    console.log(this.state.grids)
 
-    let solutions = findAllSolutions.findAllSolutions(trueGrid_Mount, this.state.grids.dictionary)
 
-
-    await solutions.forEach(answer => {
-      validAnswers.push(answer + " :")
-    })
-
-    console.log(this.state.answers)
 
   }
 
@@ -120,33 +130,6 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-        {this.state.state == true && <Timer
-            initialTime={0}
-            direction="forward"
-            timeToUpdate={10}
-            checkpoints={[
-              {
-                time: 0,
-                callback: () => alert('countdown finished'),
-              },
-            ]}
-          >
-            <div style={{ fontFamily: 'Helvetica Neue' }}>
-              <div style={{ fontSize: 32 }}>
-              <Timer.Minutes /> minutes   
-              <div></div>
-                <Timer.Seconds /> seconds
-              </div>
-            </div>
-          </Timer>}
-          <header as='h1'>Boggle Game</header>
-          {this.state.state === false && <p>Valid Answers</p>}
-          {this.state.state === false && <p>{this.state.answers}</p>}
-          {this.state.state === true && <p>Correct Answers</p>}
-          {this.state.state === true && <p>{this.state.correct}</p>}
-          {this.state.state === false && <p>Your Correct Answers</p>}
-          {this.state.state === false && <p>{this.state.correct}</p>}
-
           {this.state.state == true && <Timer
             initialTime={0}
             direction="forward"
@@ -157,15 +140,26 @@ class App extends React.Component {
                 callback: () => alert('countdown finished'),
               },
             ]}
+            onPause={() => { this.setState({timer: Timer.Seconds + Timer.Minutes }) }}
           >
             <div style={{ fontFamily: 'Helvetica Neue' }}>
               <div style={{ fontSize: 32 }}>
-              <Timer.Minutes /> minutes   
+                <Timer.Minutes /> minutes
               <div></div>
                 <Timer.Seconds /> seconds
               </div>
             </div>
           </Timer>}
+          <header as='h1'>Boggle Game</header>
+          {this.state.state === true && <p>Correct Answers</p>}
+          {this.state.state === true && <p>{this.state.correct}</p>}
+
+          {this.state.state == false && <p>Time: {this.state.timer}</p>}
+          {this.state.state === false && <p>Valid Answers</p>}
+          {this.state.state === false && <p>{this.state.answers}</p>}
+          {this.state.state === false && <p>Your Correct Answers</p>}
+          {this.state.state === false && <p>{this.state.correct}</p>}
+
 
           {this.state.state === true && <Grid container justify="center" spacing={100}>
             {/* Row 1 */}
