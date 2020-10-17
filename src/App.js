@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BoggleSolver from './Boggle Implementation/boggle_solver';
 // import StartButton from './StartButton';
 // import StopButton from './StopButton';
-import { Grid, Button, TextField, Input } from '@material-ui/core';
+import { Grid, Button, InputLabel, NativeSelect } from '@material-ui/core';
 import Timer from 'react-compound-timer'
 import * as firebase from 'firebase';
 import './App.css';
@@ -75,6 +75,10 @@ class App extends React.Component {
       correct: [],
       grids: [],
       timer: undefined,
+      line1: [],
+      line2: [],
+      line3: [],
+      puzzle: 0,
     }
     this.ref = firebase.firestore();
   }
@@ -90,24 +94,27 @@ class App extends React.Component {
           size: doc.data().size,
         })
       })
-      console.log(gridArray[0].dictionary);
+      console.log(gridArray[this.state.puzzle].dictionary);
       this.setState({
         grids: gridArray,
+        line1: gridArray[this.state.puzzle].grid[1],
+        line2: gridArray[this.state.puzzle].grid[2],
+        line3: gridArray[this.state.puzzle].grid[3],
       })
 
       var mapToGrid = [];
-      for (let i = 1; i <= gridArray[0].size; i++) {
-        mapToGrid.push(gridArray[0].grid[i]);
+      for (let i = 1; i <= gridArray[this.state.puzzle].size; i++) {
+        mapToGrid.push(gridArray[this.state.puzzle].grid[i]);
       }
       console.log(mapToGrid)
-
-      let solutions = await findAllSolutions.findAllSolutions(mapToGrid, gridArray[0].dictionary)
+      let solutions = [];
+      solutions = await findAllSolutions.findAllSolutions(mapToGrid, gridArray[this.state.puzzle].dictionary)
 
       console.log(solutions)
       await solutions.forEach(answer => {
         validAnswers.push(answer + " :")
       })
-
+      this.setState({ answers: validAnswers})
       console.log(this.state.answers)
 
       this.unsubscribe();
@@ -123,13 +130,19 @@ class App extends React.Component {
 
   }
 
-
+  async updateBoard() {
+    validAnswers = []
+    this.setState({ word: '', correct: [], timer: 0});
+    this.componentDidMount();
+  }
 
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
+
+          {/* Timer component */}
           {this.state.state == true && <Timer
             initialTime={0}
             direction="forward"
@@ -140,7 +153,7 @@ class App extends React.Component {
                 callback: () => alert('countdown finished'),
               },
             ]}
-            onPause={() => { this.setState({timer: Timer.Seconds + Timer.Minutes }) }}
+            onStart={() => { this.setState({ timer: Timer.Seconds + Timer.Minutes }) }}
           >
             <div style={{ fontFamily: 'Helvetica Neue' }}>
               <div style={{ fontSize: 32 }}>
@@ -150,47 +163,50 @@ class App extends React.Component {
               </div>
             </div>
           </Timer>}
-          <header as='h1'>Boggle Game</header>
+
+          {/* Title and corredt input list */}
+          <header className="Header-Title">Boggle Game</header>
           {this.state.state === true && <p>Correct Answers</p>}
           {this.state.state === true && <p>{this.state.correct}</p>}
 
-          {this.state.state == false && <p>Time: {this.state.timer}</p>}
+          {/* Full answer list and correct answers submitted */}
+          {/* {this.state.state == false && <p>Time: {this.state.timer}</p>} */}
           {this.state.state === false && <p>Valid Answers</p>}
           {this.state.state === false && <p>{this.state.answers}</p>}
           {this.state.state === false && <p>Your Correct Answers</p>}
           {this.state.state === false && <p>{this.state.correct}</p>}
 
-
-          {this.state.state === true && <Grid container justify="center" spacing={100}>
+          {/* 3 x 3 Grid */}
+          {this.state.state === true && <Grid className="Grid" container justify="center" spacing={100}>
             {/* Row 1 */}
-            <Grid container justify="center" item xs={12} spacing={3}>
+            <Grid className="Grid-line" container justify="center" item xs={12} spacing={3}>
 
-              {Object.keys(gridItems1).map((rowKey) => {
+              {Object.keys(this.state.line1).map((rowKey) => {
                 return (
-                  <Grid item key={rowKey} xs={gridItems1[rowKey].size}>
-                    {gridItems1[rowKey].label}
+                  <Grid item key={rowKey} xs={3}>
+                    {this.state.line1[rowKey]}
                   </Grid>
                 );
               })}
             </Grid>
 
             {/* Row 2 */}
-            <Grid container justify="center" item xs={12} spacing={3}>
-              {Object.keys(gridItems2).map((rowKey) => {
+            <Grid className="Grid-line" container justify="center" item xs={12} spacing={3}>
+              {Object.keys(this.state.line2).map((rowKey) => {
                 return (
-                  <Grid item key={rowKey} xs={gridItems2[rowKey].size}>
-                    {gridItems2[rowKey].label}
+                  <Grid item key={rowKey} xs={3}>
+                    {this.state.line2[rowKey]}
                   </Grid>
                 );
               })}
             </Grid>
 
             {/* Row 3 */}
-            <Grid container justify="center" item xs={12} spacing={3}>
-              {Object.keys(gridItems3).map((rowKey) => {
+            <Grid className="Grid-line" container justify="center" item xs={12} spacing={3}>
+              {Object.keys(this.state.line3).map((rowKey) => {
                 return (
-                  <Grid item key={rowKey} xs={gridItems3[rowKey].size}>
-                    {gridItems3[rowKey].label}
+                  <Grid item key={rowKey} xs={3}>
+                    {this.state.line3[rowKey]}
                   </Grid>
                 );
               })}
@@ -203,7 +219,7 @@ class App extends React.Component {
           <TextInput promptText="Enter Word" />   */}
 
           {this.state.state === true && <Button variant="contained" color="white" prompt="Enter Word" onClick={() => {
-            getUserInput(prompt, this.state.grids[0], this.state.grids[0].dictionary).then(function (result) {
+            getUserInput(prompt, this.state.grids[this.state.puzzle], this.state.grids[this.state.puzzle].dictionary).then(function (result) {
               console.log("Returned");
               console.log(result);
               return result;
@@ -221,17 +237,36 @@ class App extends React.Component {
             })
 
           }} >Enter Word</Button>}
+ 
+          <div className="Start-Button">
+            <div>
+              <Button variant="contained" color="primary" onClick={() => {
+                console.log("Pressed");
+                console.log(this.state.grids.grid)
+                this.setState({ state: true });
+                this.updateBoard();
+              }}> Start </Button>
+            </div>
+  
+            {<div>
+              <InputLabel htmlFor="select">3x3</InputLabel>
+              <NativeSelect id="select" onChange={(value) => { console.log(value.target.value); this.setState({puzzle: value.target.value, state: true}); this.updateBoard()
+              }}>
+                <option value="0">1</option>
+                <option value="1">2</option>
+              </NativeSelect>
+            </div>}
 
-          <Button variant="contained" color="primary" onClick={() => {
-            console.log("Pressed");
-            console.log(this.state.grids.grid)
-            this.setState({ state: true });
-          }}> Start </Button>
+          </div>
 
-          <Button variant="contained" color="secondary" onClick={() => {
-            console.log("Pressed");
-            this.setState({ state: false });
-          }}> Stop </Button>
+          <div className="Stop-Button">
+            <Button variant="contained" color="secondary" onClick={() => {
+              console.log("Pressed");
+              this.setState({ state: false });
+              
+            }}> Stop </Button>
+          </div>
+
 
         </header>
       </div>
